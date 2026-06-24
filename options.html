@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageToMD Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="settings-page">
+    <header class="settings-header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">M↓</span>
+          <div>
+            <h1>PageToMD Settings</h1>
+            <p class="subtitle">Configure default behaviour and integrations</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="settings-body">
+      <!-- Default Behaviour -->
+      <section class="settings-section">
+        <h2>Default Behaviour</h2>
+        <p class="section-desc">These settings are applied every time you open the converter popup.</p>
+
+        <div class="setting-group">
+          <label class="setting-row">
+            <input type="checkbox" id="defaultIncludeMetadata" data-key="defaultIncludeMetadata">
+            <span>Always include YAML front matter</span>
+          </label>
+          <label class="setting-row">
+            <input type="checkbox" id="defaultAutoCopy" data-key="defaultAutoCopy">
+            <span>Always auto-copy to clipboard</span>
+          </label>
+          <label class="setting-row">
+            <input type="checkbox" id="defaultStripTracking" data-key="defaultStripTracking" checked>
+            <span>Always strip tracking parameters</span>
+          </label>
+          <label class="setting-row">
+            <input type="checkbox" id="defaultGenerateToc" data-key="defaultGenerateToc">
+            <span>Always generate table of contents</span>
+          </label>
+        </div>
+
+        <div class="setting-row-inline">
+          <span class="setting-label">Preferred heading style</span>
+          <select id="defaultHeadingStyle" data-key="defaultHeadingStyle">
+            <option value="atx">ATX (# style)</option>
+            <option value="setext">Setext (underline style)</option>
+          </select>
+        </div>
+
+        <div class="setting-row-inline">
+          <span class="setting-label">Default export format</span>
+          <select id="defaultExportFormat" data-key="defaultExportFormat">
+            <option value="markdown">Markdown (.md)</option>
+            <option value="html">HTML (.html)</option>
+            <option value="txt">Plain text (.txt)</option>
+            <option value="rst">reStructuredText (.rst)</option>
+          </select>
+        </div>
+
+        <div class="setting-row-inline">
+          <span class="setting-label">Default front matter template</span>
+          <select id="defaultFrontMatterTemplate" data-key="defaultFrontMatterTemplate">
+            <option value="generic">Generic</option>
+            <option value="jekyll">Jekyll</option>
+            <option value="hugo">Hugo</option>
+            <option value="obsidian">Obsidian</option>
+            <option value="astro">Astro</option>
+          </select>
+        </div>
+
+        <div class="setting-row-inline">
+          <span class="setting-label">Default image handling</span>
+          <select id="defaultImageMode" data-key="defaultImageMode">
+            <option value="keep">Keep as-is</option>
+            <option value="absolute">Convert to absolute URLs</option>
+            <option value="strip">Strip all images</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Cloud Sync -->
+      <section class="settings-section">
+        <h2>Cloud Sync</h2>
+        <p class="section-desc">Save converted files directly to cloud storage services.</p>
+
+        <div class="setting-row-inline">
+          <span class="setting-label">Service</span>
+          <select id="cloudService" data-key="cloudService">
+            <option value="">Disabled</option>
+            <option value="github">GitHub</option>
+            <option value="dropbox">Dropbox</option>
+            <option value="gdrive">Google Drive</option>
+          </select>
+        </div>
+
+        <div class="cloud-config" id="cloudConfig">
+          <!-- GitHub settings -->
+          <div class="cloud-fields hidden" id="githubFields">
+            <div class="field-group">
+              <label for="githubToken">Personal Access Token</label>
+              <input type="password" id="githubToken" data-key="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+              <span class="field-hint">Create a token at Settings &gt; Developer settings &gt; Personal access tokens. Needs <code>repo</code> scope.</span>
+            </div>
+            <div class="field-row">
+              <div class="field-group half">
+                <label for="githubOwner">Repository Owner</label>
+                <input type="text" id="githubOwner" data-key="githubOwner" placeholder="username">
+              </div>
+              <div class="field-group half">
+                <label for="githubRepo">Repository Name</label>
+                <input type="text" id="githubRepo" data-key="githubRepo" placeholder="my-repo">
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="githubPath">Folder Path (optional)</label>
+              <input type="text" id="githubPath" data-key="githubPath" placeholder="content/bookmarks">
+              <span class="field-hint">Files will be saved inside this folder in the repository. Leave empty for root.</span>
+            </div>
+          </div>
+
+          <!-- Dropbox settings -->
+          <div class="cloud-fields hidden" id="dropboxFields">
+            <div class="field-group">
+              <label for="dropboxToken">Access Token</label>
+              <input type="password" id="dropboxToken" data-key="dropboxToken" placeholder="sl.xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+              <span class="field-hint">Generate an access token from the Dropbox App Console with <code>files.content.write</code> scope.</span>
+            </div>
+            <div class="field-group">
+              <label for="dropboxPath">Folder Path (optional)</label>
+              <input type="text" id="dropboxPath" data-key="dropboxPath" placeholder="/Markdown">
+              <span class="field-hint">Files will be saved inside this Dropbox folder. Include leading slash.</span>
+            </div>
+          </div>
+
+          <!-- Google Drive settings -->
+          <div class="cloud-fields hidden" id="gdriveFields">
+            <div class="field-group">
+              <label for="gdriveToken">Access Token</label>
+              <input type="password" id="gdriveToken" data-key="gdriveToken" placeholder="ya29.xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+              <span class="field-hint">Create an OAuth2 credential in Google Cloud Console with Google Drive API enabled. The token needs <code>https://www.googleapis.com/auth/drive.file</code> scope.</span>
+            </div>
+            <div class="field-group">
+              <label for="gdriveFolderId">Folder ID (optional)</label>
+              <input type="text" id="gdriveFolderId" data-key="gdriveFolderId" placeholder="1x2y3z...">
+              <span class="field-hint">The ID of the Google Drive folder to save files into. Leave empty for root ("My Drive").</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="testCloudBtn" class="btn btn-secondary hidden">Test Connection</button>
+        <div id="cloudTestResult" class="cloud-test-result hidden"></div>
+      </section>
+
+      <!-- Custom Turndown Rules -->
+      <section class="settings-section">
+        <h2>Custom Conversion Rules</h2>
+        <p class="section-desc">Define custom element selectors to remove or transform during conversion. Rules are applied before Turndown processes the page.</p>
+
+        <div class="rules-list" id="rulesList">
+          <!-- Rules will be rendered here -->
+        </div>
+
+        <div class="rules-empty" id="rulesEmpty">
+          No custom rules configured. Add a rule below.
+        </div>
+
+        <div class="add-rule-form">
+          <h3>Add New Rule</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="ruleName">Rule Name</label>
+              <input type="text" id="ruleName" placeholder="Remove sidebars">
+            </div>
+            <div class="field-group">
+              <label for="ruleAction">Action</label>
+              <select id="ruleAction">
+                <option value="remove">Remove element</option>
+                <option value="unwrap">Unwrap (keep content, remove tag)</option>
+                <option value="collapse">Collapse to plain text</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="ruleSelector">CSS Selector</label>
+            <input type="text" id="ruleSelector" placeholder=".sidebar, .ad-banner, #promo-section">
+            <span class="field-hint">CSS selector matching elements this rule applies to. Separate multiple selectors with commas.</span>
+          </div>
+          <button id="addRuleBtn" class="btn btn-secondary">Add Rule</button>
+        </div>
+      </section>
+
+      <!-- Save -->
+      <div class="save-bar">
+        <div id="saveStatus" class="save-status"></div>
+        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

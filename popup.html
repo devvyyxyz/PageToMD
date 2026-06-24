@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageToMD</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">M↓</span>
+        <div>
+          <h1>PageToMD</h1>
+          <p class="subtitle" id="pageTitle">Loading...</p>
+        </div>
+      </div>
+      <button id="settingsBtn" class="btn-icon" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 10a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M6.6 2.2l-.4 1.5a5.5 5.5 0 00-1.7 1L3 4.1 1.6 5.6l.7 1.5a5.5 5.5 0 000 2l-.7 1.5L3 12l1.5-.7a5.5 5.5 0 002 1l.4 1.5h2.8l.4-1.5a5.5 5.5 0 001.7-1L13 12l1.4-1.5-.7-1.5a5.5 5.5 0 000-2l.7-1.5L13 4l-1.5.7a5.5 5.5 0 00-2-1L9.4 2.2H6.6z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Options -->
+    <div class="options">
+      <label class="option">
+        <input type="checkbox" id="includeMetadata" checked>
+        <span>Include YAML front matter</span>
+      </label>
+      <div class="option-row">
+        <span class="option-label">Front matter template</span>
+        <select id="frontMatterTemplate">
+          <option value="generic">Generic</option>
+          <option value="jekyll">Jekyll</option>
+          <option value="hugo">Hugo</option>
+          <option value="obsidian">Obsidian</option>
+          <option value="astro">Astro</option>
+        </select>
+      </div>
+      <label class="option">
+        <input type="checkbox" id="generateToc">
+        <span>Generate table of contents</span>
+      </label>
+      <label class="option">
+        <input type="checkbox" id="convertSelection">
+        <span>Convert selection only</span>
+      </label>
+      <label class="option">
+        <input type="checkbox" id="autoCopy">
+        <span>Auto-copy to clipboard</span>
+      </label>
+      <label class="option">
+        <input type="checkbox" id="stripTracking" checked>
+        <span>Strip tracking parameters from links</span>
+      </label>
+      <label class="option-row">
+        <input type="checkbox" id="shiftHeadings">
+        <span>Shift heading depth</span>
+      </label>
+      <div class="option-sub" id="headingShiftWrap">
+        <select id="headingShift">
+          <option value="1">+1 (demote)</option>
+          <option value="-1">-1 (promote)</option>
+          <option value="2">+2 (demote)</option>
+          <option value="-2">-2 (promote)</option>
+        </select>
+      </div>
+      <div class="option-row">
+        <span class="option-label">Image handling</span>
+        <select id="imageMode">
+          <option value="keep">Keep as-is</option>
+          <option value="absolute">Convert to absolute URLs</option>
+          <option value="strip">Strip all images</option>
+        </select>
+      </div>
+      <div class="option-row">
+        <span class="option-label">Export format</span>
+        <select id="exportFormat">
+          <option value="markdown">Markdown (.md)</option>
+          <option value="html">HTML (.html)</option>
+          <option value="txt">Plain text (.txt)</option>
+          <option value="rst">reStructuredText (.rst)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="actions">
+      <button id="convertBtn" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 2h4l2 2h6v10H2V2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        Convert
+      </button>
+      <div class="action-row">
+        <button id="batchBtn" class="btn btn-secondary" title="Convert all open tabs and download as separate files">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          Batch Convert
+        </button>
+        <button id="cloudBtn" class="btn btn-secondary" title="Save to configured cloud service">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2a4 4 0 00-3.8 2.8A3 3 0 005 11h6a3 3 0 001-5.8A4 4 0 008 2z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <path d="M5 13v1M8 13v1M11 13v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Cloud Save
+        </button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="status hidden"></div>
+
+    <!-- Preview panel (shown after conversion) -->
+    <div id="previewPanel" class="preview-panel hidden">
+      <!-- Readability score -->
+      <div id="readabilityPanel" class="readability-panel hidden">
+        <div class="readability-header">
+          <span class="readability-label">Readability</span>
+          <span class="readability-score" id="readabilityScore">--</span>
+        </div>
+        <div class="readability-details" id="readabilityDetails"></div>
+      </div>
+
+      <div class="preview-header">
+        <span class="char-count" id="charCount">0 chars</span>
+        <div class="preview-actions">
+          <button id="copyBtn" class="btn btn-sm" title="Copy to clipboard">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            Copy
+          </button>
+          <button id="downloadBtn" class="btn btn-sm" title="Download file">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 12v1.5h10V12" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            </svg>
+            Download
+          </button>
+        </div>
+      </div>
+      <pre class="preview-content" id="previewContent"></pre>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+PageToMD converts any web page into clean, ready-to-use Markdown with one click. Copy to your clipboard, download as a file, or save directly to GitHub, Dropbox, or Google Drive.
+
+Instant Conversion
+Convert any webpage to Markdown with a single click. PageToMD finds the main article by checking 15 semantic selectors, stripping navigation, ads, sidebars, comments, and clutter so you get clean output. Works via the toolbar button, right-click context menu, or Alt+M keyboard shortcut.
+
+Multiple Export Formats
+Export as Markdown (.md), HTML (.html), plain text (.txt), or reStructuredText (.rst). Each format preserves structure and content. Preview the output in the popup before copying or downloading.
+
+Front Matter Templates
+Auto-generate YAML front matter for Generic, Jekyll, Hugo, Obsidian, or Astro static site generators. Extracts title, date, author, description, and tags from page metadata, plus reading time and word count.
+
+Table of Contents
+Toggle automatic TOC generation from headings with linked anchors and proper hierarchy, skipping H1 to avoid duplicating the page title.
+
+Batch Mode
+Convert all open tabs at once and download each as a separate file. Perfect for archiving research, saving articles offline, or bulk content migration.
+
+Cloud Sync
+Save directly to GitHub (Contents API), Dropbox (Files API), or Google Drive (Drive API v3). Configure tokens and folder paths in the settings page. Includes a test connection button to verify credentials.
+
+Custom Conversion Rules
+Define CSS selector rules to remove elements, unwrap while keeping inner content, or collapse to plain text. Ideal for site-specific elements the default cleaner misses.
+
+Readability Score
+See a Flesch Reading Ease score with a colour-coded label from Very Easy to Difficult, Flesch-Kincaid Grade Level, word count, and sentence count.
+
+Image Handling
+Control how images appear: keep original URLs, convert relative paths to absolute URLs, or strip images and keep only alt text.
+
+Heading Control
+Shift heading depth up or down by one or two levels. Choose ATX (#) or Setext (underline) heading formats.
+
+Tracking Parameter Stripping
+Removes 30+ tracking parameters from URLs in links and images, including UTM tags, Facebook click IDs, Google click IDs, and marketing identifiers.
+
+Settings Page
+Configure defaults: always include front matter, auto-copy, preferred heading style, default export format, and more. All settings persist between sessions.
+
+Dark Mode
+The popup automatically follows your Firefox theme for light and dark environments.
+
+Privacy
+PageToMD collects no data. All processing is local to your browser. Cloud sync uses your own credentials and communicates only with the service you choose.
